@@ -2,7 +2,7 @@
  * @Author: shufei.han
  * @Date: 2024-11-11 11:29:23
  * @LastEditors: shufei.han
- * @LastEditTime: 2024-11-11 16:38:35
+ * @LastEditTime: 2024-11-11 18:26:20
  * @FilePath: \webrtc-demo\client\src\models\ws.model.ts
  * @Description: 
  */
@@ -19,6 +19,8 @@ export enum WsMsgTypes {
     USER_ONLINE = 'user_online',
     USER_OFFLINE = 'user_offline',
     CHAT_MSG = 'chat_msg',
+    ICE = 'ice',
+    SDP = 'sdp',
 }
 
 export interface MessageContent {
@@ -26,7 +28,7 @@ export interface MessageContent {
     to: string;
     content: string;
     time: string | number;
-    isSelf?:boolean;
+    isSelf?: boolean;
 }
 
 export class WsMsgs<T = any> {
@@ -40,17 +42,20 @@ export class WsMsgs<T = any> {
     }
 }
 
-export class CallMsgs {
+export class CallMsgs<T = string> {
     public from: string
-    constructor(public to: string, public content?: string) {
+    constructor(public to: string, public content?: T) {
         const { userInfo } = useMainStore()
         this.from = userInfo.username
-        return { to, from: this.from, content }
     }
 }
 
 export class WebSocketService {
     public ws: WebSocket
+    private onSdpReceived: (sdp: RTCSessionDescription) => void
+    private onAnswerReceived: (answer: RTCSessionDescriptionInit) => void
+    private onIceReceived: (ice: RTCIceCandidate) => void
+
     constructor(private callback: (ws?: WebSocket) => void) {
         this.init()
         callback(this.ws)
@@ -69,36 +74,63 @@ export class WebSocketService {
         }
     }
 
-    private handleMessage(data: WsMsgs) {
+    private handleMessage({ data, type }: WsMsgs) {
         const { setUserOnlineStatus } = useUserAction()
-        switch (data.type) {
+        switch (type) {
             case WsMsgTypes.CONNECT_SUCCESS:
                 this.callback(this.ws)
                 return
             case WsMsgTypes.USER_ONLINE:
-                setUserOnlineStatus(data.data as string, true)
+                setUserOnlineStatus(data as string, true)
                 return
             case WsMsgTypes.USER_OFFLINE:
-                setUserOnlineStatus(data.data as string, false)
+                setUserOnlineStatus(data as string, false)
                 return
             case WsMsgTypes.CHAT_MSG:
-                useMsgStore().addChatMsg(data.data as MessageContent)
+                useMsgStore().addChatMsg(data as MessageContent)
                 return
             case WsMsgTypes.CALL:
-                console.log("收到呼叫消息")
+                console.log("收到呼叫消息", data)
+                // this.onCallReceived?.(data)
                 return
+            case WsMsgTypes.SDP:
+                console.log("收到sdp消息", data)
+                this.onSdpReceived?.(data.content as RTCSessionDescription)
+                return
+            case WsMsgTypes.ANSWER:
+                console.log("收到answer消息", data)
+                this.onAnswerReceived?.(data.content as RTCSessionDescriptionInit)
+                return
+            case WsMsgTypes.ICE:
+                console.log("收到ice消息", data)
+                this.onIceReceived?.(data.content as RTCIceCandidate)
         }
-
     }
+
+    public on(type: 'sdp_received' | 'answer_received' | 'ice_candidate', callback: (...data: any) => void) {
+        switch (type) {
+            case 'sdp_received':
+                this.onSdpReceived = callback
+                break
+            case 'answer_received':
+                this.onAnswerReceived = callback
+                break
+            case 'ice_candidate':
+                this.onIceReceived = callback
+                break
+        }
+    }
+
 }
 
 export let wsConnect: WebSocket;
+export let wsService: WebSocketService;
 
 export const connectWs = (onSuccess?: (ws: WebSocket) => void) => {
     if (wsConnect) {
         return
     }
-    new WebSocketService((ws) => {
+    wsService = new WebSocketService((ws) => {
         wsConnect = ws
         onSuccess?.(ws)
     })
@@ -107,4 +139,5 @@ export const connectWs = (onSuccess?: (ws: WebSocket) => void) => {
 export const closeWs = () => {
     wsConnect?.close()
     wsConnect = null
+    wsService = null
 }

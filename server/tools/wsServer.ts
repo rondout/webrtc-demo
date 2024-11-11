@@ -2,7 +2,7 @@
  * @Author: shufei.han
  * @Date: 2024-11-11 10:29:17
  * @LastEditors: shufei.han
- * @LastEditTime: 2024-11-11 16:37:32
+ * @LastEditTime: 2024-11-11 18:09:18
  * @FilePath: \webrtc-demo\server\tools\wsServer.ts
  * @Description: 
  */
@@ -18,6 +18,8 @@ export enum WsMsgTypes {
     USER_ONLINE = 'user_online',
     USER_OFFLINE = 'user_offline',
     CHAT_MSG = 'chat_msg',
+    ICE = 'ice',
+    SDP = 'sdp',
 }
 
 
@@ -44,13 +46,11 @@ export const handleMessage = async (msg: WsMsgs, user: string) => {
     switch (msg.type) {
         case WsMsgTypes.CALL:
             // 发送通话请求
-            sendMsgToUser(msg.data.to, new WsMsgs(WsMsgTypes.CALL).content)
-            break;
-        case WsMsgTypes.RECEIVE_CALL:
-            // 接收通话请求
+            sendMsgToUser(msg.data.to, new WsMsgs(WsMsgTypes.CALL, msg.data).content)
             break;
         case WsMsgTypes.ANSWER:
             // 接收通话请求
+            sendMsgToUser(msg.data.to, new WsMsgs(WsMsgTypes.ANSWER, msg.data).content)
             break;
         case WsMsgTypes.CHAT_MSG:
             // 收到连接成功消息
@@ -58,6 +58,12 @@ export const handleMessage = async (msg: WsMsgs, user: string) => {
             sendMsgToUser(msg.data.to, new WsMsgs(WsMsgTypes.CHAT_MSG, msg.data).content)
             sendMsgToUser(msg.data.from, new WsMsgs(WsMsgTypes.CHAT_MSG, msg.data).content)
             break;
+        case WsMsgTypes.SDP:
+            sendMsgToUser(msg.data.to, new WsMsgs(WsMsgTypes.SDP, msg.data).content)
+            break
+        case WsMsgTypes.ICE:
+            sendMsgToUser(msg.data.to, new WsMsgs(WsMsgTypes.ICE, msg.data).content)
+            break
         default:
             break;
     }
@@ -86,7 +92,7 @@ async function sendToAllUser(msg: WsMsgs) {
         })
     } catch (error) {
         console.log(error);
-        
+
     }
 }
 
