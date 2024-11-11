@@ -13,7 +13,7 @@ import { mainService } from '@/api/http'
 import type { ThemeConfig } from 'ant-design-vue/es/config-provider/context'
 import { message } from 'ant-design-vue'
 
-export const useMainStore = defineStore('counter', () => {
+export const useMainStore = defineStore('main', () => {
 
   const initUserInfo = getUserLoggedIn()
 
@@ -53,13 +53,18 @@ export const useMainStore = defineStore('counter', () => {
   }
 
   const getAllUsers = async () => {
-    const users =  await mainService.getAllUser()
+    const users = await mainService.getAllUser()
     allUsers.value = users
+  }
+
+  const updateUser = (username: string, status: boolean) => {
+    const user = allUsers.value.find(item => item.username === username)
+    user && (user.online = status)
   }
 
   watchEffect(() => {
     document.documentElement.style.setProperty('--primary', themeColor.value)
   })
 
-  return { userInfo, login, getUserInfoFinish, theme, themeColor, userLoggedIn, getAllUsers, friends }
+  return { userInfo, login, getUserInfoFinish, theme, themeColor, userLoggedIn, getAllUsers, friends, updateUser }
 })

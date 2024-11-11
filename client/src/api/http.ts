@@ -7,6 +7,7 @@
  * @Description: 
  */
 import type { UserInfo } from "@/models/base.model";
+import type { MessageContent } from "@/models/ws.model";
 import { HttpService } from "@gl/main";
 
 export const httService = new HttpService({}, () => { }, (res) => {
@@ -19,7 +20,13 @@ export const mainService = {
     async login (data: UserInfo) {
         return await httService.post<UserInfo>('/api/login', data)
     },
+    async logout () {
+        return await httService.get('/api/logout')
+    },
     async getAllUser () {
         return await httService.get<UserInfo[]>('/api/user')
-    }
+    },
+    getAllMessages () {
+        return httService.get<MessageContent[]>('/api/msgs')
+    },
 }

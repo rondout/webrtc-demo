@@ -1,16 +1,26 @@
+/*
+ * @Author: shufei.han
+ * @Date: 2024-11-08 18:06:28
+ * @LastEditors: shufei.han
+ * @LastEditTime: 2024-11-11 14:38:13
+ * @FilePath: \webrtc-demo\client\src\hooks\useUserInfo.ts
+ * @Description: 
+ */
 import { useRouter } from 'vue-router';
 import { useMainStore } from './../stores/main';
 import { setUserLoggedIn, type UserInfo } from '@/models/base.model';
 import { message } from 'ant-design-vue';
 import confirm from 'ant-design-vue/es/modal/confirm';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, toRef } from 'vue';
+import { mainService } from '@/api/http';
+import { closeWs } from '@/models/ws.model';
+import router from '@/router';
 export function useUserLoggedIn() {
     const mainStore = useMainStore()
     return mainStore.userLoggedIn
 }
 
 export function useUserAction() {
-    const router = useRouter()
     const loading = ref(false)
     const mainStore = useMainStore()
 
@@ -25,23 +35,29 @@ export function useUserAction() {
         confirm({
             title: '退出登录',
             content: '是否退出登录？',
-            onOk: () => {
+            onOk: async () => {
+                await mainService.logout()
                 message.success('退出成功')
                 setUserLoggedIn()
                 router.push('/login')
+                closeWs()
             }
         })
     }
 
-    return { logout, login, loading }
+    const setUserOnlineStatus = (user: string, status: boolean) => {
+        mainStore.updateUser(user, status)
+    }
+
+    return { logout, login, loading, setUserOnlineStatus }
 }
 
 export const useUserFriends = () => {
-    const { friends, getAllUsers } = useMainStore()
+    const mainStore = useMainStore()
 
     onMounted(() => {
-        getAllUsers()
+        mainStore.getAllUsers()
     })
 
-    return { friends }
+    return { friends: toRef(() => mainStore.friends) }
 }

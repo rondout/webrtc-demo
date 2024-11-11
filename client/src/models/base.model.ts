@@ -1,6 +1,7 @@
 export interface UserInfo {
     username: string;
     password: string;
+    online?: boolean;
 }
 
 export const UserLoginStatusStorageKey = 'userLoginStatus'
@@ -20,3 +21,8 @@ export const getUserLoggedIn = () => {
 }
 
 export const setUserLoggedIn = (userInfo?: UserInfo) => localStorage.setItem(UserLoginStatusStorageKey, JSON.stringify(userInfo))
+
+export enum UserConnectMethods {
+    MESSAGE,
+    VIDEO
+}
