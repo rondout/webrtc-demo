@@ -1,0 +1,15 @@
+{
+  "name": "webrtc-demo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev:web": "cd ./client && pnpm dev",
+    "dev:server": "cd ./server && pnpm dev",
+    "dev": "concurrently \"pnpm dev:web\" \"pnpm dev:server\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

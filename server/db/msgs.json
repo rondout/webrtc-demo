@@ -12,21 +12,6 @@
     "time": 1731308904349
   },
   {
-    "to": "user",
-    "from": "admin",
-    "content": "dqwdwqdqdw",
-    "time": 1731309427558
-  },
-  {
-    "to": "admin",
-    "from": "user",
-    "content": "1231312",
-    "time": 1731313104433
-  },
-  { "to": "admin", "from": "user", "content": "ffffff", "time": 1731313211945 },
-  { "to": "admin", "from": "user", "content": "www", "time": 1731313345228 },
-  { "to": "admin", "from": "user", "content": "ff", "time": 1731313402703 },
-  {
     "to": "admin",
     "from": "user",
     "content": "fffewfwe",
@@ -85,5 +70,17 @@
     "from": "user",
     "content": "收到  我是user",
     "time": 1731313951311
+  },
+  {
+    "from": "admin",
+    "to": "user",
+    "content": "你好 user同学 今天是周二",
+    "time": 1731392807936
+  },
+  {
+    "from": "user",
+    "to": "admin",
+    "content": "你好 admin 今天是24-11-12",
+    "time": 1731392824751
   }
 ]
