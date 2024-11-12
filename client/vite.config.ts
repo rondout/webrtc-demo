@@ -2,7 +2,7 @@
  * @Author: shufei.han
  * @Date: 2024-11-07 16:08:55
  * @LastEditors: shufei.han
- * @LastEditTime: 2024-11-07 17:32:14
+ * @LastEditTime: 2024-11-12 16:43:26
  * @FilePath: \webrtc-demo\client\vite.config.ts
  * @Description: 
  */
@@ -17,6 +17,7 @@ export default defineConfig({
     vue(),
   ],
   server: {
+    "host": '0.0.0.0',
     proxy: {
       '/api': 'http://localhost:4004'
     }

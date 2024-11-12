@@ -2,7 +2,7 @@
  * @Author: shufei.han
  * @Date: 2024-11-11 11:29:23
  * @LastEditors: shufei.han
- * @LastEditTime: 2024-11-11 18:26:20
+ * @LastEditTime: 2024-11-12 15:40:16
  * @FilePath: \webrtc-demo\client\src\models\ws.model.ts
  * @Description: 
  */
@@ -40,6 +40,10 @@ export class WsMsgs<T = any> {
     public get content() {
         return JSON.stringify({ type: this.type, data: this.data })
     }
+
+    public send() {
+        wsConnect.send(this.content)
+    }
 }
 
 export class CallMsgs<T = string> {
@@ -62,7 +66,7 @@ export class WebSocketService {
     }
 
     private init() {
-        this.ws = new WebSocket('ws://localhost:4004');
+        this.ws = new WebSocket(`ws://${location.hostname}:4004`);
         this.ws.onmessage = (event) => {
             this.handleMessage(JSON.parse(event.data))
         }
@@ -89,12 +93,12 @@ export class WebSocketService {
             case WsMsgTypes.CHAT_MSG:
                 useMsgStore().addChatMsg(data as MessageContent)
                 return
-            case WsMsgTypes.CALL:
-                console.log("收到呼叫消息", data)
-                // this.onCallReceived?.(data)
-                return
+            // case WsMsgTypes.CALL:
+            //     alert("收到呼叫消息")
+            //     // this.onCallReceived?.(data)
+            //     return
             case WsMsgTypes.SDP:
-                console.log("收到sdp消息", data)
+                console.log("收到sdp消息")
                 this.onSdpReceived?.(data.content as RTCSessionDescription)
                 return
             case WsMsgTypes.ANSWER:

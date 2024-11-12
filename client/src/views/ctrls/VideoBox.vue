@@ -2,7 +2,7 @@
  * @Author: shufei.han
  * @Date: 2024-11-11 12:20:00
  * @LastEditors: shufei.han
- * @LastEditTime: 2024-11-11 18:52:15
+ * @LastEditTime: 2024-11-12 16:31:46
  * @FilePath: \webrtc-demo\client\src\views\ctrls\VideoBox.vue
  * @Description: 
 -->
@@ -22,7 +22,7 @@
 </template>
 
 <script setup lang="ts">
-import { iceConfiguration } from "@/models/webrtc.model";
+import { createPcAndCall, createPeerConnection, getMediaStream, handleReceiveCall, iceConfiguration, setLocalStreamToPc } from "@/models/webrtc.model";
 import {
     CallMsgs,
     wsConnect,
@@ -43,76 +43,41 @@ const state = reactive({
 });
 
 const makeCall = async () => {
-    const localStream = await navigator.mediaDevices.getUserMedia({
-        video: true,
-        audio: true,
-    });
+    const { pc, localStream } = await createPcAndCall(props.user, stream => {
+        console.log("对方视频流", stream);
+        targetVideoRef.value.srcObject = stream;
+    })
     currentVideoRef.value.srcObject = localStream;
-    const pc = new RTCPeerConnection(iceConfiguration);
-    state.pc = pc;
-    localStream.getTracks().forEach((track) => {
-        pc.addTrack(track, localStream);
-    });
-
-    pc.ontrack = (event) => {
-        alert()
-        targetVideoRef.value.srcObject = event.streams[0];
-    };
-
-    pc.onicecandidate = (event) => {
-        if (event.candidate) {
-            wsConnect.send(
-                new WsMsgs(WsMsgTypes.ICE, new CallMsgs(props.user, event.candidate)).content
-            );
-        }
-    };
-
-    const offer = await pc.createOffer();
-    await pc.setLocalDescription(offer);
-
-    wsConnect.send(
-        new WsMsgs(WsMsgTypes.SDP, new CallMsgs(props.user, pc.localDescription))
-            .content
-    );
-    //
-    return pc;
+    state.pc = pc
 };
 
 const initWsCallCallback = async () => {
     wsService.on("sdp_received", async (sdp) => {
+        if (state.pc) {
+            // 暂不支持多端同时通话
+            console.log('暂不支持多端同时通话')
+            return
+        }
         console.log("客户端收到sdp", sdp);
-        if (state.receivePc === null) {
-            state.receivePc = new RTCPeerConnection();
-            state.receivePc.ontrack = (event) => {
-                alert('receive track')
-                targetVideoRef.value.srcObject = event.streams[0];
-            };
-        }
-        await state.receivePc.setRemoteDescription(new RTCSessionDescription(sdp));
-        if (sdp.type === "offer") {
-            // 这里说明是收到邀请
-            const answer = await state.receivePc.createAnswer();
-            state.receivePc.setLocalDescription(answer);
-            // 再把answer发送给对方
-            wsConnect.send(
-                new WsMsgs(WsMsgTypes.ANSWER, new CallMsgs(props.user, answer)).content
-            );
-        }
+        state.pc = createPeerConnection()
+        await handleReceiveCall(state.pc, props.user, sdp, stream => {
+            targetVideoRef.value.srcObject = stream;
+        })
+        const localStream = await setLocalStreamToPc(state.pc)
+        currentVideoRef.value.srcObject = localStream    
     });
-    wsService.on("answer_received", async (answer) => {
-        console.log("收到了对方的回答answer:", answer);
-        await state.pc.setRemoteDescription(new RTCSessionDescription(answer))
-    });
-    wsService.on('ice_candidate', async (candidate) => {
-        console.log("收到了对方的candidate:", candidate);
-        state.receivePc.addIceCandidate(new RTCIceCandidate(candidate))
-    }
-)
-
 };
 
 onMounted(() => {
     initWsCallCallback();
+    wsService.on("answer_received", async (answer) => {
+        console.log("收到了对方的回答answer:", answer);
+        await state.pc?.setRemoteDescription(new RTCSessionDescription(answer))
+    });
+    wsService.on('ice_candidate', async (candidate) => {
+        console.log("收到了对方的candidate:", candidate);
+        state.pc?.addIceCandidate(new RTCIceCandidate(candidate))
+    })
 });
 
 const handleCall = async () => {
