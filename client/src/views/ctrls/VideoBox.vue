@@ -2,7 +2,7 @@
  * @Author: shufei.han
  * @Date: 2024-11-11 12:20:00
  * @LastEditors: shufei.han
- * @LastEditTime: 2024-11-12 16:31:46
+ * @LastEditTime: 2024-11-13 09:32:44
  * @FilePath: \webrtc-demo\client\src\views\ctrls\VideoBox.vue
  * @Description: 
 -->
@@ -23,13 +23,7 @@
 
 <script setup lang="ts">
 import { createPcAndCall, createPeerConnection, getMediaStream, handleReceiveCall, iceConfiguration, setLocalStreamToPc } from "@/models/webrtc.model";
-import {
-    CallMsgs,
-    wsConnect,
-    WsMsgs,
-    WsMsgTypes,
-    wsService,
-} from "@/models/ws.model";
+import { wsService } from "@/models/ws.model";
 import { Button } from "ant-design-vue";
 import { onMounted, reactive, ref } from "vue";
 
@@ -62,16 +56,16 @@ const initWsCallCallback = async () => {
         state.pc = createPeerConnection()
         await handleReceiveCall(state.pc, props.user, sdp, stream => {
             targetVideoRef.value.srcObject = stream;
-        })
-        const localStream = await setLocalStreamToPc(state.pc)
-        currentVideoRef.value.srcObject = localStream    
+        }, localStream => { currentVideoRef.value.srcObject = localStream })
+        // const localStream = await setLocalStreamToPc(state.pc)
+        // currentVideoRef.value.srcObject = localStream    
     });
 };
 
 onMounted(() => {
     initWsCallCallback();
     wsService.on("answer_received", async (answer) => {
-        console.log("收到了对方的回答answer:", answer);
+        console.log("收到了对方的回答answer:", answer, state.pc);
         await state.pc?.setRemoteDescription(new RTCSessionDescription(answer))
     });
     wsService.on('ice_candidate', async (candidate) => {

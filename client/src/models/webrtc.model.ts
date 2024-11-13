@@ -2,9 +2,9 @@
 /*
 * @Author: shufei.han
 * @Date: 2024-11-11 17:06:21
-* @LastEditors: shufei.han
-* @LastEditTime: 2024-11-12 17:35:41
-* @FilePath: \webrtc-demo\client\src\models\webrtc.model.ts
+ * @LastEditors: shufei.han
+ * @LastEditTime: 2024-11-13 09:40:57
+ * @FilePath: \webrtc-demo\client\src\models\webrtc.model.ts
 * @Description: 
 */
 import { CallMsgs, WsMsgs, WsMsgTypes } from "./ws.model"
@@ -34,18 +34,10 @@ export const createPcAndCall = async (targetUser: string, onTrack: (stream: Medi
     // 创建pc通信对象
     const pc = createPeerConnection()
     const localStream = await setLocalStreamToPc(pc)
-    // try {
-    //     localStream = await getMediaStream()
-    //     // 获取本地媒体流
-    //     // 将本地媒体流添加到pc中
-    //     localStream.getTracks().forEach(track => {
-    //         pc.addTrack(track, localStream)
-    //     })
-    // } catch (error) {
-
-    // }
     // 监听track事件
     pc.ontrack = event => {
+        console.log('call ontrack');
+        
         const srcObject = event.streams[0]
         onTrack(srcObject)
     }
@@ -65,15 +57,27 @@ export const createPcAndCall = async (targetUser: string, onTrack: (stream: Medi
     return { pc, localStream }
 }
 
-export const handleReceiveCall = async (pc: RTCPeerConnection, targetUser: string, sdp: RTCSessionDescriptionInit, onTrack: (stream: MediaStream) => void) => {
+export const handleReceiveCall = async (pc: RTCPeerConnection, targetUser: string, sdp: RTCSessionDescriptionInit, onTrack: (stream: MediaStream) => void, onGetLocalStream: (stream: MediaStream) => void) => {
     // 创建pc通信对象
     // const pc = createPeerConnection()
     // 将媒体流添加到pc中
     // 监听track事件
+    const localStream = await setLocalStreamToPc(pc)
+    onGetLocalStream(localStream)
     pc.ontrack = event => {
+        console.log('receive call ontrack');
+        
         const srcObject = event.streams[0]
         onTrack(srcObject)
     }
+    
+    pc.onicecandidate = event => {
+        if (event.candidate) {
+            // 发送ice信息给目标用户
+            new WsMsgs(WsMsgTypes.ICE, new CallMsgs(targetUser, event.candidate)).send()
+        }
+    }
+
     await pc.setRemoteDescription(new RTCSessionDescription(sdp))
 
     const answer = await pc.createAnswer()
