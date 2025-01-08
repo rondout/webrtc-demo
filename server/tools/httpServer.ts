@@ -2,7 +2,7 @@
  * @Author: shufei.han
  * @Date: 2024-11-07 16:17:49
  * @LastEditors: shufei.han
- * @LastEditTime: 2025-01-08 17:34:10
+ * @LastEditTime: 2025-01-08 17:53:41
  * @FilePath: \webrtc-demo\server\tools\httpServer.ts
  * @Description: 
  */
@@ -18,10 +18,10 @@ const app = express()
 
 app.use(logger('dev'))
 app.use(express.json())
-app.use(express.static('dist'))
+app.use(express.static('web'))
 
 app.get('/', (req, res) => {
-    res.send('Hello World!')
+    // res.send('Hello World!')
 })
 
 app.get('/api/user', async (req, res) => {
