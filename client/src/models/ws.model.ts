@@ -1,147 +1,144 @@
-/*
- * @Author: shufei.han
- * @Date: 2024-11-11 11:29:23
- * @LastEditors: shufei.han
- * @LastEditTime: 2024-11-12 15:40:16
- * @FilePath: \webrtc-demo\client\src\models\ws.model.ts
- * @Description: 
- */
-
-import { useUserAction } from "@/hooks/useUserInfo"
-import { useMainStore } from "@/stores/main"
+import { ref } from "vue";
+import { useMainStore } from "@/stores/main";
 import { useMsgStore } from "@/stores/msgStore";
 
 export enum WsMsgTypes {
-    CALL = 'call',
-    RECEIVE_CALL = 'receive_call',
-    ANSWER = 'answer',
-    CONNECT_SUCCESS = 'connect_success',
-    USER_ONLINE = 'user_online',
-    USER_OFFLINE = 'user_offline',
-    CHAT_MSG = 'chat_msg',
-    ICE = 'ice',
-    SDP = 'sdp',
+  CALL = "call",
+  RECEIVE_CALL = "receive_call",
+  ANSWER = "answer",
+  CONNECT_SUCCESS = "connect_success",
+  USER_ONLINE = "user_online",
+  USER_OFFLINE = "user_offline",
+  CHAT_MSG = "chat_msg",
+  ICE = "ice",
+  SDP = "sdp",
+  END_CALL = "end_call",
 }
-
 export interface MessageContent {
-    from: string;
-    to: string;
-    content: string;
-    time: string | number;
-    isSelf?: boolean;
+  from: string;
+  to: string;
+  content: string;
+  time: string | number;
+  isSelf?: boolean;
 }
-
-export class WsMsgs<T = any> {
-    constructor(public type: WsMsgTypes, public data?: T) {
-        this.type = type
-        this.data = data
-    }
-
-    public get content() {
-        return JSON.stringify({ type: this.type, data: this.data })
-    }
-
-    public send() {
-        wsConnect.send(this.content)
-    }
+export class WsMsgs<T = unknown> {
+  constructor(
+    public type: WsMsgTypes,
+    public data?: T,
+  ) {}
+  get content() {
+    return JSON.stringify({ type: this.type, data: this.data });
+  }
+  send() {
+    if (wsConnect?.readyState !== WebSocket.OPEN)
+      throw new Error("消息服务尚未连接");
+    wsConnect.send(this.content);
+  }
 }
-
 export class CallMsgs<T = string> {
-    public from: string
-    constructor(public to: string, public content?: T) {
-        const { userInfo } = useMainStore()
-        this.from = userInfo.username
-    }
+  public from: string;
+  constructor(
+    public to: string,
+    public content?: T,
+  ) {
+    this.from = useMainStore().userInfo.username;
+  }
 }
+type SignalEvent =
+  | "sdp_received"
+  | "answer_received"
+  | "ice_candidate"
+  | "call_ended"
+  | "disconnected";
+type SignalHandler = (content: any, from: string) => void;
+export const connectionStatus = ref<
+  "connecting" | "connected" | "disconnected"
+>("disconnected");
 
 export class WebSocketService {
-    public ws: WebSocket
-    private onSdpReceived: (sdp: RTCSessionDescription) => void
-    private onAnswerReceived: (answer: RTCSessionDescriptionInit) => void
-    private onIceReceived: (ice: RTCIceCandidate) => void
-
-    constructor(private callback: (ws?: WebSocket) => void) {
-        this.init()
-        callback(this.ws)
+  public ws: WebSocket;
+  private listeners = new Map<SignalEvent, Set<SignalHandler>>();
+  constructor(private callback?: (ws: WebSocket) => void) {
+    this.connect();
+  }
+  connect() {
+    if (this.ws && this.ws.readyState <= WebSocket.OPEN) return;
+    connectionStatus.value = "connecting";
+    const socket = new WebSocket(
+      `${location.protocol === "https:" ? "wss" : "ws"}://${location.hostname}:4004`,
+    );
+    this.ws = socket;
+    wsConnect = socket;
+    socket.onopen = () => {
+      if (wsService === this) {
+        connectionStatus.value = "connected";
+        this.callback?.(socket);
+      }
+    };
+    socket.onmessage = (event) => {
+      try {
+        this.handleMessage(JSON.parse(event.data));
+      } catch (error) {
+        console.error("无法处理消息", error);
+      }
+    };
+    socket.onclose = () => {
+      if (this.ws !== socket || wsService !== this) return;
+      connectionStatus.value = "disconnected";
+      this.emit("disconnected", null, "");
+    };
+    socket.onerror = () => {
+      if (wsService === this) connectionStatus.value = "disconnected";
+    };
+  }
+  private emit(type: SignalEvent, content: unknown, from: string) {
+    this.listeners.get(type)?.forEach((listener) => listener(content, from));
+  }
+  private handleMessage({ type, data }: { type: WsMsgTypes; data: any }) {
+    switch (type) {
+      case WsMsgTypes.USER_ONLINE:
+        useMainStore().updateUser(data, true);
+        break;
+      case WsMsgTypes.USER_OFFLINE:
+        useMainStore().updateUser(data, false);
+        break;
+      case WsMsgTypes.CHAT_MSG:
+        useMsgStore().addChatMsg(data);
+        break;
+      case WsMsgTypes.SDP:
+        this.emit("sdp_received", data.content, data.from);
+        break;
+      case WsMsgTypes.ANSWER:
+        this.emit("answer_received", data.content, data.from);
+        break;
+      case WsMsgTypes.ICE:
+        this.emit("ice_candidate", data.content, data.from);
+        break;
+      case WsMsgTypes.END_CALL:
+        this.emit("call_ended", data.content, data.from);
+        break;
     }
-
-    private init() {
-        this.ws = new WebSocket(`ws://${location.hostname}:4004`);
-        this.ws.onmessage = (event) => {
-            this.handleMessage(JSON.parse(event.data))
-        }
-        this.ws.onerror = (error) => {
-            console.log('error', error)
-        }
-        this.ws.onclose = (ev) => {
-            console.log('close', ev)
-        }
-    }
-
-    private handleMessage({ data, type }: WsMsgs) {
-        const { setUserOnlineStatus } = useUserAction()
-        switch (type) {
-            case WsMsgTypes.CONNECT_SUCCESS:
-                this.callback(this.ws)
-                return
-            case WsMsgTypes.USER_ONLINE:
-                setUserOnlineStatus(data as string, true)
-                return
-            case WsMsgTypes.USER_OFFLINE:
-                setUserOnlineStatus(data as string, false)
-                return
-            case WsMsgTypes.CHAT_MSG:
-                useMsgStore().addChatMsg(data as MessageContent)
-                return
-            // case WsMsgTypes.CALL:
-            //     alert("收到呼叫消息")
-            //     // this.onCallReceived?.(data)
-            //     return
-            case WsMsgTypes.SDP:
-                console.log("收到sdp消息")
-                this.onSdpReceived?.(data.content as RTCSessionDescription)
-                return
-            case WsMsgTypes.ANSWER:
-                console.log("收到answer消息", data)
-                this.onAnswerReceived?.(data.content as RTCSessionDescriptionInit)
-                return
-            case WsMsgTypes.ICE:
-                console.log("收到ice消息", data)
-                this.onIceReceived?.(data.content as RTCIceCandidate)
-        }
-    }
-
-    public on(type: 'sdp_received' | 'answer_received' | 'ice_candidate', callback: (...data: any) => void) {
-        switch (type) {
-            case 'sdp_received':
-                this.onSdpReceived = callback
-                break
-            case 'answer_received':
-                this.onAnswerReceived = callback
-                break
-            case 'ice_candidate':
-                this.onIceReceived = callback
-                break
-        }
-    }
-
+  }
+  on(type: SignalEvent, listener: SignalHandler) {
+    if (!this.listeners.has(type)) this.listeners.set(type, new Set());
+    this.listeners.get(type).add(listener);
+    return () => {
+      this.listeners.get(type)?.delete(listener);
+    };
+  }
 }
-
 export let wsConnect: WebSocket;
 export let wsService: WebSocketService;
-
-export const connectWs = (onSuccess?: (ws: WebSocket) => void) => {
-    if (wsConnect) {
-        return
-    }
-    wsService = new WebSocketService((ws) => {
-        wsConnect = ws
-        onSuccess?.(ws)
-    })
+export function connectWs(onSuccess?: (ws: WebSocket) => void) {
+  if (wsService) {
+    wsService.connect();
+    return;
+  }
+  wsService = new WebSocketService(onSuccess);
 }
-
-export const closeWs = () => {
-    wsConnect?.close()
-    wsConnect = null
-    wsService = null
+export function closeWs() {
+  wsConnect?.close();
+  wsConnect = null;
+  wsService = null;
+  connectionStatus.value = "disconnected";
 }

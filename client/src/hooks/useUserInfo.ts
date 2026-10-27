@@ -39,6 +39,7 @@ export function useUserAction() {
                 await mainService.logout()
                 message.success('退出成功')
                 setUserLoggedIn()
+                mainStore.userLoggedIn = false
                 router.push('/login')
                 closeWs()
             }

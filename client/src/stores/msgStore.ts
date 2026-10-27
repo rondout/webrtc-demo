@@ -9,31 +9,27 @@
 import { mainService } from "@/api/http";
 import { type MessageContent } from "@/models/ws.model";
 import { defineStore } from "pinia";
-import { computed, onMounted, ref } from "vue";
+import { computed, ref } from "vue";
 import { useMainStore } from "./main";
 
 export const useMsgStore = defineStore('msg', () => {
     const allChatMsgs = ref<MessageContent[]>([])
     const currentChat = ref<string>()
-    const { userInfo } = useMainStore()
+    const mainStore = useMainStore()
 
     const getAllChatMessages = async () => {
         const messages = await mainService.getAllMessages()
-        allChatMsgs.value = messages
+        allChatMsgs.value = messages.map(msg => ({ ...msg, isSelf: msg.from === mainStore.userInfo?.username }))
     }
 
-    onMounted(() => {
-        getAllChatMessages()
-    })
-
     const currentChatMsgs = computed(() => {
-        if (!currentChat) {
+        if (!currentChat.value) {
             return []
         }
         return allChatMsgs.value.filter(msg => {
             // 要么是发送者，要么是接收者
-            return (msg.from === currentChat.value && msg.to === userInfo.username)
-                || (msg.to === currentChat.value && msg.from === userInfo.username)
+            return (msg.from === currentChat.value && msg.to === mainStore.userInfo?.username)
+                || (msg.to === currentChat.value && msg.from === mainStore.userInfo?.username)
         })
     })
 
@@ -42,8 +38,8 @@ export const useMsgStore = defineStore('msg', () => {
     }
 
     const addChatMsg = (msg: MessageContent) => {
-        allChatMsgs.value.push({...msg, isSelf: msg.from === userInfo.username})
+        allChatMsgs.value.push({...msg, isSelf: msg.from === mainStore.userInfo?.username})
     }
 
-    return { allChatMsgs, currentChatMsgs, setCurrentChat, addChatMsg, currentChat }
+    return { allChatMsgs, currentChatMsgs, setCurrentChat, addChatMsg, currentChat, getAllChatMessages }
 })

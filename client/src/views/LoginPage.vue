@@ -1,67 +1,64 @@
-<!--
- * @Author: shufei.han
- * @Date: 2024-11-07 16:08:55
- * @LastEditors: shufei.han
- * @LastEditTime: 2024-11-08 18:23:59
- * @FilePath: \webrtc-demo\client\src\views\LoginPage.vue
- * @Description: 
--->
-<template>
-  <div class="login-container full-height flex">
-    <div class="login-content">
-      <h2>请登录</h2>
-      <Form :model="formState" name="basic" :label-col="{ span: 8 }" :wrapper-col="{ span: 16 }" autocomplete="off"
-        @finish="onFinish">
-        <FormItem label="Username" name="username"
-          :rules="[{ required: true, message: 'Please input your username!' }]">
-          <Input v-model:value="formState.username" />
-        </FormItem>
-
-        <FormItem label="Password" name="password"
-          :rules="[{ required: true, message: 'Please input your password!' }]">
-          <InputPassword v-model:value="formState.password" />
-        </FormItem>
-
-        <FormItem name="remember" :wrapper-col="{ offset: 8, span: 16 }">
-          <Checkbox v-model:checked="formState.remember">Remember me</Checkbox>
-        </FormItem>
-
-        <FormItem :wrapper-col="{ offset: 8, span: 16 }">
-          <Button :loading="loading" type="primary" html-type="submit">Submit</Button>
-        </FormItem>
-      </Form>
-    </div>
-  </div>
-</template>
-
-<script lang="ts" setup>
+<script setup lang="ts">
+import { reactive } from "vue";
 import { useUserAction } from "@/hooks/useUserInfo";
-import type { UserInfo } from "@/models/base.model";
-import { Button, Checkbox, Form, FormItem, Input, InputPassword } from "ant-design-vue";
-import { reactive, ref } from "vue";
-
-const {login, loading} = useUserAction()
-
-interface FormState extends UserInfo {
-  remember: boolean;
+import UiIcon from "@/components/UiIcon.vue";
+const { login, loading } = useUserAction();
+const form = reactive({ username: "", password: "" });
+async function submit() {
+  if (form.username.trim() && form.password && !loading.value)
+    await login({ username: form.username.trim(), password: form.password });
 }
-
-const formState = reactive<FormState>({
-  username: "",
-  password: "",
-  remember: true,
-});
-
-const onFinish = async (values: FormState) => {
-  const { username, password } = values;
-  await login({ username, password });
-};
 </script>
-
-<style lang="scss" scoped>
-.login-content {
-  border: 1px solid var(--primary);
-  border-radius: 8px;
-  padding: 12px;
-}
-</style>
+<template>
+  <main class="login-page">
+    <div class="login-layout">
+      <section class="login-art">
+        <div class="login-brand">
+          <span class="brand-mark"><span>ↄ</span><span>ↄ</span></span
+          ><span>此刻<small>/ together</small></span>
+        </div>
+        <div class="stage-rings" aria-hidden="true"><i /><i /></div>
+        <div class="stage-hill hill-back" />
+        <div class="stage-hill hill-front" />
+        <div class="login-art-copy">
+          <span>A LITTLE CLOSER, TOGETHER.</span>
+          <h1>让聊天，<br />离彼此近一点。</h1>
+          <p>分享今天的小事，听见熟悉的声音。<br />有些话，就留在此刻说吧。</p>
+        </div>
+        <div class="login-art-bottom">MAKE ROOM FOR A LITTLE HELLO.</div>
+      </section>
+      <section class="login-form-wrap">
+        <span class="login-eyebrow">WELCOME TO TOGETHER</span>
+        <h2>好久不见，欢迎回来。</h2>
+        <p class="login-intro">登录你的账号，和朋友们打个招呼。</p>
+        <form class="login-form" @submit.prevent="submit">
+          <label
+            >用户名<input
+              v-model="form.username"
+              name="username"
+              autocomplete="username"
+              placeholder="输入你的用户名"
+              required
+              :disabled="loading" /></label
+          ><label
+            >密码<input
+              v-model="form.password"
+              name="password"
+              type="password"
+              autocomplete="current-password"
+              placeholder="输入你的密码"
+              required
+              :disabled="loading" /></label
+          ><button class="primary-button" type="submit" :disabled="loading">
+            <span>{{ loading ? "正在登录…" : "进入此刻" }}</span
+            ><UiIcon name="arrow" :size="18" />
+          </button>
+        </form>
+        <p class="login-help">使用已有的 demo 账号登录</p>
+        <p class="login-footer">
+          <UiIcon name="chat" :size="13" />一条消息，一次见面，一点靠近。
+        </p>
+      </section>
+    </div>
+  </main>
+</template>

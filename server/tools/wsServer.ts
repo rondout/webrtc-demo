@@ -20,6 +20,7 @@ export enum WsMsgTypes {
     CHAT_MSG = 'chat_msg',
     ICE = 'ice',
     SDP = 'sdp',
+    END_CALL = 'end_call',
 }
 
 
@@ -63,6 +64,9 @@ export const handleMessage = async (msg: WsMsgs, user: string) => {
             break
         case WsMsgTypes.ICE:
             sendMsgToUser(msg.data.to, new WsMsgs(WsMsgTypes.ICE, msg.data).content)
+            break
+        case WsMsgTypes.END_CALL:
+            sendMsgToUser(msg.data.to, new WsMsgs(WsMsgTypes.END_CALL, { ...msg.data, from: user }).content)
             break
         default:
             break;

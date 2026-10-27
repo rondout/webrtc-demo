@@ -1,79 +1,106 @@
-<!--
- * @Author: shufei.han
- * @Date: 2024-11-08 18:25:16
- * @LastEditors: shufei.han
- * @LastEditTime: 2024-11-11 14:15:58
- * @FilePath: \webrtc-demo\client\src\views\main\UserList.vue
- * @Description: 
--->
-<template>
-    <div class="user-list full-height">
-        <div class="user-list-header">
-            <div class="title">用户列表</div>
-        </div>
-        <div class="friends-list">
-            <div v-for="user of friends" :key="user.username" class="user-item">
-                <div class="inner flex-btw">
-                    <div class="flex-start">
-                        <span class="name">{{ user.username }}</span>
-                        <Tag v-if="user.online" color="success">Online</Tag>
-                        <Tag v-else color="error">Offline</Tag>
-                    </div>
-                    <div class="flex-start">
-                        <span style="background-color: #fff;border-radius: 4px;">
-                            <Button :disabled="!user.online" size="small" @click="handleSelect(user)">联系</Button>
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</template>
-
 <script setup lang="ts">
-import { useUserFriends } from '@/hooks/useUserInfo';
-import { type UserInfo } from '@/models/base.model';
-import { Button, Tag } from 'ant-design-vue';
-
-const { friends } = useUserFriends()
-const emits = defineEmits<{
-    (e: 'userSelect',user: string): void
-}>()
-
-const handleSelect = (user: UserInfo) => {
-    emits('userSelect', user.username)
+import { computed, ref } from "vue";
+import { useMainStore } from "@/stores/main";
+import { useMsgStore } from "@/stores/msgStore";
+import UiIcon from "@/components/UiIcon.vue";
+import UserAvatar from "@/components/UserAvatar.vue";
+defineProps<{ selectedUser: string }>();
+defineEmits<{ userSelect: [user: string] }>();
+const main = useMainStore();
+const messages = useMsgStore();
+const search = ref("");
+const filteredFriends = computed(() =>
+  main.friends.filter((user) =>
+    user.username
+      .toLocaleLowerCase()
+      .includes(search.value.trim().toLocaleLowerCase()),
+  ),
+);
+const onlineCount = computed(
+  () => main.friends.filter((user) => user.online).length,
+);
+function lastMessage(username: string) {
+  return [...messages.allChatMsgs]
+    .reverse()
+    .find((msg) => msg.from === username || msg.to === username);
 }
-
+function preview(username: string) {
+  const msg = lastMessage(username);
+  return msg
+    ? `${msg.from === main.userInfo?.username ? "我：" : ""}${msg.content}`
+    : "打个招呼，开始聊天吧";
+}
+function timeLabel(username: string) {
+  const time = lastMessage(username)?.time;
+  if (!time) return "";
+  const date = new Date(time);
+  if (Number.isNaN(date.getTime())) return "";
+  return date.toLocaleDateString() === new Date().toLocaleDateString()
+    ? date.toLocaleTimeString("zh-CN", { hour: "2-digit", minute: "2-digit" })
+    : date.toLocaleDateString("zh-CN", { month: "numeric", day: "numeric" });
+}
 </script>
-
-<style lang="scss" scoped>
-.user-list {
-    width: 250px;
-    border-right: 1px solid var(--primary);
-
-    .user-list-header {
-        padding: 12px;
-
-        .title {
-            color: var(--primary)
-        }
-
-        border-bottom: 1px solid var(--primary);
-    }
-
-    .user-item {
-        padding: 6px;
-
-        .inner {
-            padding: 6px;
-            background-color: var(--primary);
-            border-radius: 4px;
-            color: #fff;
-
-            .name {
-                padding-right: 8px;
-            }
-        }
-    }
-}
-</style>
+<template>
+  <aside class="contacts-sidebar">
+    <div class="sidebar-brand">
+      <div class="sidebar-identity">
+        <h2>此刻<span>/ together</span></h2>
+        <p class="current-account" :title="main.userInfo?.username">
+          当前登录：<strong>{{ main.userInfo?.username }}</strong>
+        </p>
+      </div>
+      <span class="brand-spark">✳</span>
+    </div>
+    <label class="contact-search"
+      ><UiIcon name="search" :size="17" /><input
+        v-model="search"
+        type="search"
+        placeholder="搜索联系人"
+        aria-label="搜索联系人"
+    /></label>
+    <div class="list-heading">
+      <h3>消息</h3>
+      <span>{{ String(main.friends.length).padStart(2, "0") }}</span>
+    </div>
+    <div class="friends-list">
+      <button
+        v-for="user in filteredFriends"
+        :key="user.username"
+        class="friend-item"
+        :class="{ selected: selectedUser === user.username }"
+        :aria-pressed="selectedUser === user.username"
+        @click="$emit('userSelect', user.username)"
+      >
+        <UserAvatar :name="user.username" :online="user.online" status /><span
+          class="friend-details"
+          ><span class="friend-name"
+            >{{ user.username
+            }}<time>{{ timeLabel(user.username) }}</time></span
+          ><span class="friend-preview">{{
+            preview(user.username)
+          }}</span></span
+        >
+      </button>
+      <p v-if="!filteredFriends.length" class="list-empty">
+        {{
+          search
+            ? "没有找到这位朋友"
+            : main.getFriendsFinish
+              ? "还没有联系人，用另一个账号登录后就能在这里找到彼此。"
+              : "正在寻找你的朋友…"
+        }}
+      </p>
+    </div>
+    <p class="online-count">
+      <i class="status-dot online" />{{ onlineCount }} 位朋友在线
+    </p>
+    <div class="sidebar-note">
+      <span class="note-decoration">hello,</span>
+      <h3>距离远一点，也没关系。</h3>
+      <p>发条消息，或者见个面。</p>
+      <span class="note-footer"
+        >Make room for a little hello.<UiIcon name="arrow" :size="16"
+      /></span>
+    </div>
+  </aside>
+</template>

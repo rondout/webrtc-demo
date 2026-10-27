@@ -18,9 +18,10 @@ export const useMainStore = defineStore('main', () => {
   const initUserInfo = getUserLoggedIn()
 
   const userInfo = ref<UserInfo>(initUserInfo)
-  const getUserInfoFinish = ref(false)
-  const themeColor = ref('#3f51b5')
+  const getUserInfoFinish = ref(true)
+  const themeColor = ref('#df784f')
   const userLoggedIn = ref(!!initUserInfo)
+  const getFriendsFinish = ref(false)
 
   const allUsers = ref<UserInfo[]>([])
 
@@ -30,7 +31,9 @@ export const useMainStore = defineStore('main', () => {
 
   const theme = computed<ThemeConfig>(() => ({
     token: {
-      colorPrimary: "#3f51b5",
+      colorPrimary: themeColor.value,
+      borderRadius: 10,
+      fontFamily: "'DM Sans', 'Segoe UI', 'Microsoft YaHei', sans-serif",
     },
   }))
 
@@ -55,6 +58,7 @@ export const useMainStore = defineStore('main', () => {
   const getAllUsers = async () => {
     const users = await mainService.getAllUser()
     allUsers.value = users
+    getFriendsFinish.value = true
   }
 
   const updateUser = (username: string, status: boolean) => {
@@ -66,5 +70,5 @@ export const useMainStore = defineStore('main', () => {
     document.documentElement.style.setProperty('--primary', themeColor.value)
   })
 
-  return { userInfo, login, getUserInfoFinish, theme, themeColor, userLoggedIn, getAllUsers, friends, updateUser }
+  return { userInfo, login, getUserInfoFinish, theme, themeColor, userLoggedIn, getAllUsers, friends, updateUser, getFriendsFinish }
 })
