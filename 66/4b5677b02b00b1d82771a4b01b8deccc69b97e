@@ -1,0 +1,73 @@
+client/src/models/settings.model.ts
+  s_322c2805cb8a80::t_de43531174dfe2 1-9
+client/src/hooks/useWebRtcCall.ts
+  h_82e58b1971efb5 37,39,114,120,122,124,128,146,149,333,336,338,342
+  s_322c2805cb8a80::t_a6b5c7166a3550 1-36,38,40-97,108,131-138,140-142,145,154-155,161-162,169,174-175,206,214-215,217,224,229,232-236,273-274,290,303-312,317,320,326-328,332,346,348-349,353,358,362-363,371-372,459-461,487-488,496,504,506-541
+  s_322c2805cb8a80::t_16fcaa32dc3650 98-107,109-113,115-119,121,123,125-127,129-130,139,143-144,147-148,150-153,156-160,163-168,170-173,176-205,207-213,216,218-223,225-228,230-231,237-272,275-289,291-302,313-316,318-319,321-325,329-331,334-335,337,339-341,343-345,347,350-352,354-357,359-361,364-370,373-458,462-486,489-495,497-503,505
+client/src/models/ws.model.ts
+  s_322c2805cb8a80::t_20a7eced2e3c17 68-69
+server/db/settings.json
+  s_322c2805cb8a80::t_f2ac972edd0cba 1-2,17-18
+  s_322c2805cb8a80::t_00b1d2773befb2 3-5,14-16
+  h_82e58b1971efb5 6-13
+client/src/router/index.ts
+  h_82e58b1971efb5 9-11,17-18,22-25,27-31,34-35,39-42,45-46,48,50,52
+  h_82e58b1971efb5 7,26
+server/tools/settings.ts
+  s_322c2805cb8a80::t_de43531174dfe2 1-43
+server/tools/httpServer.ts
+  s_322c2805cb8a80::t_20a7eced2e3c17 16-18,49,99-104
+  s_322c2805cb8a80::t_de43531174dfe2 15,68-98
+README.md
+  s_322c2805cb8a80::t_c096b538c4bb36 32-34,49-50
+  s_322c2805cb8a80::t_d226dcc41f1387 46-47,54
+  s_322c2805cb8a80::t_6bbf62a495a957 10,14-18
+scripts/dev-cert.ps1
+  s_322c2805cb8a80::t_20a7eced2e3c17 1-38
+client/src/stores/settings.ts
+  s_322c2805cb8a80::t_de43531174dfe2 8,10-13,15-22,24-28,30-35,37-41,44-52,63
+  s_322c2805cb8a80::t_7f528681b4c872 1-7,9,14,23,29,36,42-43,53-62
+client/public/webrtc-flow.html
+  s_322c2805cb8a80::t_db474ba6fa274c 1-46
+client/src/views/main/MainPage.vue
+  s_322c2805cb8a80::t_de43531174dfe2 16-17
+  s_322c2805cb8a80::t_7f528681b4c872 13,55-59,64-67
+client/vite.config.ts
+  s_322c2805cb8a80::t_20a7eced2e3c17 10,21-26,29-38
+client/src/views/ctrls/VideoBox.vue
+  s_322c2805cb8a80::t_a6b5c7166a3550 188,192,199-229,232,239,258
+  s_322c2805cb8a80::t_75324495166fd6 10,30,37,67,73,86,92,96,115,125,133,147,150,153,174,183,241,252
+  s_322c2805cb8a80::t_7f528681b4c872 38-41,54-56,161-167,175-182,253-255
+  s_322c2805cb8a80::t_eeb64890dc3aa9 230-231
+client/src/api/http.ts
+  s_322c2805cb8a80::t_de43531174dfe2 12,33-39
+package.json
+  s_322c2805cb8a80::t_20a7eced2e3c17 7
+client/src/views/cam/CamPage.vue
+  h_82e58b1971efb5 1-114
+.gitignore
+  s_322c2805cb8a80::t_20a7eced2e3c17 2
+server/db/msgs.json
+  h_82e58b1971efb5 1
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "664b5677b02b00b1d82771a4b01b8deccc69b97e",
+  "prompts": {},
+  "humans": {
+    "h_82e58b1971efb5": {
+      "author": "shufei.han <shufei.han@gl-inet.com>"
+    }
+  },
+  "sessions": {
+    "s_322c2805cb8a80": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a17ca0-5a6a-7082-998c-633cdb03110d",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "shufei.han <shufei.han@gl-inet.com>"
+    }
+  }
+}
