@@ -1,0 +1,18 @@
+{
+  "admin": {
+    "microphoneEnabled": false,
+    "cameraEnabled": false
+  },
+  "lisi": {
+    "microphoneEnabled": false,
+    "cameraEnabled": true
+  },
+  "zhangsan": {
+    "microphoneEnabled": true,
+    "cameraEnabled": true
+  },
+  "user": {
+    "microphoneEnabled": false,
+    "cameraEnabled": true
+  }
+}

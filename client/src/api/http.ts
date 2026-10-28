@@ -9,6 +9,7 @@
 import type { UserInfo } from "@/models/base.model";
 import type { MessageContent } from "@/models/ws.model";
 import { HttpService } from "@gl/main";
+import type { UserSettings } from '@/models/settings.model';
 
 export const httService = new HttpService({}, () => { }, (res) => {
     return res
@@ -28,5 +29,11 @@ export const mainService = {
     },
     getAllMessages () {
         return httService.get<MessageContent[]>('/api/msgs')
+    },
+    getUserSettings () {
+        return httService.get<UserSettings>('/api/settings')
+    },
+    saveUserSettings (settings: UserSettings) {
+        return httService.put<UserSettings>('/api/settings', settings)
     },
 }

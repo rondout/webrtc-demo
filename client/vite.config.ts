@@ -7,6 +7,7 @@
  * @Description: 
  */
 import { fileURLToPath, URL } from 'node:url'
+import { readFileSync } from 'node:fs'
 
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
@@ -17,9 +18,24 @@ export default defineConfig({
     vue(),
   ],
   server: {
+    https: {
+      key: readFileSync(fileURLToPath(new URL('../.certs/dev-key.pem', import.meta.url))),
+      cert: readFileSync(fileURLToPath(new URL('../.certs/dev-cert.pem', import.meta.url))),
+    },
+    port: 5173,
+    strictPort: true,
     "host": '0.0.0.0',
     proxy: {
-      '/api': 'http://localhost:4004'
+      '/api': {
+        target: 'https://localhost:4004',
+        // 仅本地开发代理接受项目生成的自签名证书。
+        secure: false,
+      },
+      '/ws': {
+        target: 'https://localhost:4004',
+        ws: true,
+        secure: false,
+      },
     }
   },
   resolve: {

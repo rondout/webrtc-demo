@@ -10,8 +10,11 @@ import UserAvatar from "@/components/UserAvatar.vue";
 import { closeWs, connectWs, connectionStatus } from "@/models/ws.model";
 import { useMsgStore } from "@/stores/msgStore";
 import { useMainStore } from "@/stores/main";
+import { useSettingsStore } from "@/stores/settings";
 import { useUserAction } from "@/hooks/useUserInfo";
 const main = useMainStore();
+const settings = useSettingsStore();
+settings.reset();
 const messages = useMsgStore();
 const { logout } = useUserAction();
 const selectedUser = ref("");
@@ -49,12 +52,19 @@ watch(
 connectWs();
 onMounted(async () => {
   try {
-    await Promise.all([main.getAllUsers(), messages.getAllChatMessages()]);
+    await Promise.all([
+      main.getAllUsers(),
+      messages.getAllChatMessages(),
+      settings.load(),
+    ]);
   } catch {
     message.error("加载联系人或消息失败，请检查服务后刷新页面");
   }
 });
-onBeforeUnmount(closeWs);
+onBeforeUnmount(() => {
+  closeWs();
+  settings.reset();
+});
 </script>
 <template>
   <main class="app-page">

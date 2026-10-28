@@ -65,7 +65,8 @@ export class WebSocketService {
     if (this.ws && this.ws.readyState <= WebSocket.OPEN) return;
     connectionStatus.value = "connecting";
     const socket = new WebSocket(
-      `${location.protocol === "https:" ? "wss" : "ws"}://${location.hostname}:4004`,
+      // 同源 WSS 经 Vite 转发到后端，浏览器只需信任前端地址的证书。
+      `${location.protocol === "https:" ? "wss" : "ws"}://${location.host}/ws`,
     );
     this.ws = socket;
     wsConnect = socket;
