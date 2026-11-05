@@ -1,0 +1,78 @@
+client/src/hooks/useUserInfo.ts
+  s_322c2805cb8a80::t_38f8b0d26af715 11,41-42
+client/src/router/index.ts
+  h_82e58b1971efb5 9,14
+  s_322c2805cb8a80::t_38f8b0d26af715 11,44-48
+client/src/api/http.ts
+  s_322c2805cb8a80::t_38f8b0d26af715 21,23
+  s_322c2805cb8a80::t_ea1951664528ec 22
+server/tools/httpServer.ts
+  h_82e58b1971efb5 36-38
+  s_322c2805cb8a80::t_e56b5bfe0203bb 19,23-30,59-64,70-91,93-94
+  h_82e58b1971efb5 34
+client/vite.config.ts
+  h_82e58b1971efb5 20-22
+client/src/stores/main.ts
+  s_322c2805cb8a80::t_38f8b0d26af715 11,18-19,21-22,24,50,58-73,89
+server/tsconfig.json
+  h_82e58b1971efb5 85
+client/src/models/base.model.ts
+  s_322c2805cb8a80::t_38f8b0d26af715 3,10
+server/public/favicon.svg
+  s_322c2805cb8a80::t_88f7bdb7f5c33d 1
+server/db/settings.json
+  h_82e58b1971efb5 3-4,15
+server/pnpm-lock.yaml
+  h_82e58b1971efb5 1,7-41,45-508,511,513,515,517,519-520,522,524,526-528,530,532,534,536,538,540,542,544,546,548,550,552,554-555,557,559,561,566,569,571,573,575,579,581,588,590-592,598,600,602,606,608,613-618,630,634,636,638,640,644,647,650-654,656,658,660,662,664,666,668,670,672,674,676,680,683-684,687,690,692,695,697-699,702-703,705,712,716,719,721,723,728,730,732,735,737,739-740,742,744-748,750,752-753,755,757,759,761,763,765,769,774,777,781,783,785,787,791,793,797,799,801,803,805,807-809,813,815,817,819,824-825,829,831,833,835,837,840,842,844,850,852,854,858,860,862,864,866,871,873,875-876,878,880,883,887,889,891,893,895,897,899,904,908,911,913,917,919,922,926-928,931,933-938,940,942,944-946,948,950-954,956-958,960-962,966,970,972,974,979,981,983,985,987,989,991
+server/public/assets/CamPage-CKe0B5gg.js
+  h_82e58b1971efb5 1-7
+server/public/assets/CamPage-haMxEUSv.js
+  h_82e58b1971efb5 1-7
+server/public/assets/LoginPage-BlHBpcPF.js
+  h_82e58b1971efb5 1
+server/public/assets/LoginPage-OS-d8BXB.js
+  h_82e58b1971efb5 1
+server/public/assets/MainPage-BVfYFzIF.js
+  h_82e58b1971efb5 1
+server/public/assets/MainPage-BZeUXLC7.js
+  h_82e58b1971efb5 1
+server/public/assets/index-BZdTJAZk.js
+  h_82e58b1971efb5 1
+server/public/assets/index-C50F4OWI.js
+  h_82e58b1971efb5 1-172
+server/public/assets/index-CKNNWeyw.css
+  h_82e58b1971efb5 1
+server/public/assets/index-DDJFlaI8.js
+  h_82e58b1971efb5 1-172
+server/public/assets/index-DeZjY1xA.js
+  h_82e58b1971efb5 1
+server/public/assets/useUserInfo-CvmvhPFM.js
+  h_82e58b1971efb5 1-37
+server/public/assets/useUserInfo-zOf8KngH.js
+  h_82e58b1971efb5 1-37
+server/public/assets/webrtc.model-4ZXXzdqd.js
+  h_82e58b1971efb5 1
+server/public/index.html
+  h_82e58b1971efb5 1-16
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "7b9295aa42a3f897b88b3b2d44981244168d7c03",
+  "prompts": {},
+  "humans": {
+    "h_82e58b1971efb5": {
+      "author": "shufei.han <shufei.han@gl-inet.com>"
+    }
+  },
+  "sessions": {
+    "s_322c2805cb8a80": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a17ca0-5a6a-7082-998c-633cdb03110d",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "shufei.han <shufei.han@gl-inet.com>"
+    }
+  }
+}
