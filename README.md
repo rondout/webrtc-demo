@@ -4,6 +4,34 @@ Vue 3 + TypeScript + Pinia 的聊天与视频通话练习项目，使用 WebSock
 
 ## 本地运行
 
+### Ubuntu 直接运行
+
+安装 Node.js 22 LTS 和 pnpm 后，在项目根目录执行（前后端是独立包，需要分别安装）：
+
+```bash
+sudo apt update
+sudo apt install -y openssl
+pnpm install
+pnpm --dir client install
+pnpm --dir server install
+pnpm dev:cert:linux
+pnpm dev
+```
+
+访问 `https://localhost:5173`；从其他电脑访问 Ubuntu 时，使用 `https://Ubuntu的IP:5173`，并在防火墙/云安全组放行 TCP 5173。浏览器请求通过 Vite 代理到后端，不需要额外对外开放 4004。
+
+Linux 证书脚本使用 Bash + OpenSSL，无需安装 PowerShell。证书包含 localhost 和本机 IPv4；通过域名或云服务器公网 IP 访问时，可指定访问地址重新生成：
+
+```bash
+CERT_IP=你的公网IP pnpm dev:cert:linux --force
+# 或者
+CERT_DNS=你的域名 pnpm dev:cert:linux --force
+```
+
+重新生成后重启前后端。自签名证书需要在访问设备上建立信任，才能可靠使用摄像头/麦克风；公网使用建议换成域名对应的受信任证书。以上是开发模式启动。
+
+### Windows 本地运行
+
 安装根目录、`client`、`server` 的依赖后，在根目录运行：
 
 ```sh

@@ -5,10 +5,14 @@
   "main": "index.js",
   "scripts": {
     "dev:cert": "pwsh -NoProfile -File scripts/dev-cert.ps1",
+    "dev:cert:linux": "bash scripts/dev-cert.sh",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev:web": "cd ./client && pnpm dev",
     "dev:server": "cd ./server && pnpm dev",
     "dev": "concurrently \"pnpm dev:web\" \"pnpm dev:server\""
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0"
   },
   "keywords": [],
   "author": "",
