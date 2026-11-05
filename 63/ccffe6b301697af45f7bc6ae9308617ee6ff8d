@@ -1,0 +1,32 @@
+README.md
+  s_322c2805cb8a80::t_a269c0dfdbf4d7 7-34
+package.json
+  s_322c2805cb8a80::t_0c1b9a8bd1177b 8,14-16
+scripts/dev-cert.sh
+  s_322c2805cb8a80::t_0c1b9a8bd1177b 1-37
+server/package.json
+  s_322c2805cb8a80::t_4f67483bb4a41d 7,9-12,21
+server/pnpm-lock.yaml
+  s_322c2805cb8a80::t_ec8e0859ac7558 39-41,48-203,358-362,631-635,677-754,919-947,1250-1255
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "63ccffe6b301697af45f7bc6ae9308617ee6ff8d",
+  "prompts": {},
+  "humans": {
+    "h_82e58b1971efb5": {
+      "author": "shufei.han <shufei.han@gl-inet.com>"
+    }
+  },
+  "sessions": {
+    "s_322c2805cb8a80": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a17ca0-5a6a-7082-998c-633cdb03110d",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "shufei.han <shufei.han@gl-inet.com>"
+    }
+  }
+}
