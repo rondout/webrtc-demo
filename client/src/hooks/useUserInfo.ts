@@ -8,7 +8,7 @@
  */
 import { useRouter } from 'vue-router';
 import { useMainStore } from './../stores/main';
-import { setUserLoggedIn, type UserInfo } from '@/models/base.model';
+import { type UserInfo } from '@/models/base.model';
 import { message } from 'ant-design-vue';
 import confirm from 'ant-design-vue/es/modal/confirm';
 import { onMounted, ref, toRef } from 'vue';
@@ -38,7 +38,8 @@ export function useUserAction() {
             onOk: async () => {
                 await mainService.logout()
                 message.success('退出成功')
-                setUserLoggedIn()
+                mainStore.userInfo = null
+                mainStore.getUserInfoFinish = false
                 mainStore.userLoggedIn = false
                 router.push('/login')
                 closeWs()

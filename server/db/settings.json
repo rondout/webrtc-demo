@@ -1,7 +1,7 @@
 {
   "admin": {
-    "microphoneEnabled": false,
-    "cameraEnabled": false
+    "microphoneEnabled": true,
+    "cameraEnabled": true
   },
   "lisi": {
     "microphoneEnabled": false,
@@ -12,7 +12,7 @@
     "cameraEnabled": true
   },
   "user": {
-    "microphoneEnabled": false,
+    "microphoneEnabled": true,
     "cameraEnabled": true
   }
 }

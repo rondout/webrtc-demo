@@ -18,6 +18,9 @@ export const httService = new HttpService({}, () => { }, (res) => {
 })
 
 export const mainService = {
+    async checkAuth () {
+        return await httService.get<UserInfo>('/api/auth/check')
+    },
     async login (data: UserInfo) {
         return await httService.post<UserInfo>('/api/login', data)
     },

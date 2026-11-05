@@ -17,6 +17,9 @@ export default defineConfig({
   plugins: [
     vue(),
   ],
+  build: {
+    outDir: '../server/public',
+  },
   server: {
     https: {
       key: readFileSync(fileURLToPath(new URL('../.certs/dev-key.pem', import.meta.url))),

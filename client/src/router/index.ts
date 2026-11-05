@@ -6,12 +6,12 @@
  * @FilePath: \webrtc-demo\client\src\router\index.ts
  * @Description:
  */
-import { createRouter, createWebHistory } from "vue-router";
+import { createRouter, createWebHashHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
-import { useUserLoggedIn } from "@/hooks/useUserInfo";
+import { useMainStore } from "@/stores/main";
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHashHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: "/",
@@ -41,12 +41,11 @@ const router = createRouter({
   ],
 });
 
-router.beforeEach((to, from, next) => {
-  if (useUserLoggedIn() || to.name === "login") {
-    next();
-  } else {
-    next("/login");
-  }
+// 刷新和路由切换均以服务端校验结果为准，不能通过修改 localStorage 绕过。
+router.beforeEach(async (to) => {
+  const loggedIn = await useMainStore().checkAuth();
+  if (!loggedIn && to.name !== 'login') return { name: 'login' };
+  if (loggedIn && to.name === 'login') return { name: 'main' };
 });
 
 export default router;
