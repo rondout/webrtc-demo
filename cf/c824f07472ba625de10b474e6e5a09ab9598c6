@@ -1,0 +1,44 @@
+client/src/assets/main.css
+  h_82e58b1971efb5 759-760
+client/src/models/webrtc.model.ts
+  h_82e58b1971efb5 37
+  s_322c2805cb8a80::t_cdc80b07a93028 10
+  s_322c2805cb8a80::t_8efa27eaa47d98 11-15,17-25
+client/vite.config.ts
+  h_82e58b1971efb5 33,38
+server/public/assets/CamPage-CYHwdRVN.js
+  h_82e58b1971efb5 1-7
+server/public/assets/LoginPage-gJJwLfXt.js
+  h_82e58b1971efb5 1
+server/public/assets/MainPage-C9iBXVKC.js
+  h_82e58b1971efb5 1
+server/public/assets/index-8hVZtkQr.js
+  h_82e58b1971efb5 1
+server/public/assets/index-BHz8IkxW.js
+  h_82e58b1971efb5 1-153
+server/public/assets/useUserInfo-Dx-ZTX9E.js
+  h_82e58b1971efb5 1-37
+server/public/index.html
+  h_82e58b1971efb5 10
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "cfc824f07472ba625de10b474e6e5a09ab9598c6",
+  "prompts": {},
+  "humans": {
+    "h_82e58b1971efb5": {
+      "author": "shufei.han <shufei.han@gl-inet.com>"
+    }
+  },
+  "sessions": {
+    "s_322c2805cb8a80": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a17ca0-5a6a-7082-998c-633cdb03110d",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "shufei.han <shufei.han@gl-inet.com>"
+    }
+  }
+}
