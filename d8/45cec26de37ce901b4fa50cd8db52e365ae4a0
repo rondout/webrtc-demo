@@ -1,0 +1,26 @@
+compose.yaml
+  s_322c2805cb8a80::t_c3e7ffb1147ab1 11-13,18-30
+deploy/nginx/default.conf
+  s_322c2805cb8a80::t_c3e7ffb1147ab1 36-37,46
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "d845cec26de37ce901b4fa50cd8db52e365ae4a0",
+  "prompts": {},
+  "humans": {
+    "h_82e58b1971efb5": {
+      "author": "shufei.han <shufei.han@gl-inet.com>"
+    }
+  },
+  "sessions": {
+    "s_322c2805cb8a80": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a17ca0-5a6a-7082-998c-633cdb03110d",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "shufei.han <shufei.han@gl-inet.com>"
+    }
+  }
+}
