@@ -21,7 +21,6 @@ export interface BaseResponse<T = any> {
     info: T;
     msg: string;
 }
-
 declare module "axios" {
     interface AxiosRequestConfig {
         /** 是否需要将data转化为formData的格式 */
@@ -132,17 +131,17 @@ export class HttpService {
     /**
     * @template T 响应数据的数据类型
     * @template D 请求体data的数据类型
-    * @description 用于发送get请求，这个方法直接将res.data字段的数据返回
+    * @description 用于发送get请求，这个方法直接将res.data.info字段的数据返回
     * @returns 
     */
     public get = async <T = any, D = any>(url: string,config?: AxiosRequestConfig<D>) => {
         const result = await this.instance.get<T, AxiosResponse<{info: T}>>(url, config);
-        return result.data;
+        return result.data.info;
     }
     /**
     * @template T 响应数据的数据类型
     * @template D 请求体data的数据类型
-    * @description 用于发送get请求，并且会设置apiPrefix，这个方法直接将res.data字段的数据返回
+    * @description 用于发送get请求，并且会设置apiPrefix，这个方法直接将res.data.info字段的数据返回
     * @returns 
     */
     public getWithPrefix = async <T = any, D = any>(url: string,config: AxiosRequestConfig<D> = {}) => {
@@ -151,19 +150,19 @@ export class HttpService {
     /**
     * @template T 响应数据的数据类型
     * @template D 请求体data的数据类型
-    * @description 用于发送post请求，这个方法直接将res.data字段的数据返回
+    * @description 用于发送post请求，这个方法直接将res.data.info字段的数据返回
     * @returns 
     */
     public post = async <T = any, D = any>(url: string,data?: D,
         config?: AxiosRequestConfig<D>) => {
         const result = await this.instance.post<T, AxiosResponse<{info: T}>>(url, data, config);
 
-        return result.data as BaseResponse<T>;
+        return result.data.info as T;
     }
     /**
     * @template T 响应数据的数据类型
     * @template D 请求体data的数据类型
-    * @description 用于发送post请求，并且会设置apiPrefix，这个方法直接将res.data字段的数据返回
+    * @description 用于发送post请求，并且会设置apiPrefix，这个方法直接将res.data.info字段的数据返回
     * @returns 
     */
     public postWithPrefix = async <T = any, D = any>(url: string,data?: D,
@@ -174,19 +173,19 @@ export class HttpService {
     /**
     * @template T 响应数据的数据类型
     * @template D 请求体data的数据类型
-    * @description 用于发送put请求，这个方法直接将res.data字段的数据返回
+    * @description 用于发送put请求，这个方法直接将res.data.info字段的数据返回
     * @returns 
     */
     public put = async <T = any, D = any>(url: string,data?: D,
         config?: AxiosRequestConfig<D>) => {
         const result = await this.instance.put<T, AxiosResponse<{info: T}>>(url, data, config);
-        return result.data as BaseResponse<T>;
+        return result.data.info as T;
     }
     
     /**
     * @template T 响应数据的数据类型
     * @template D 请求体data的数据类型
-    * @description 用于发送put请求，并且会设置apiPrefix，这个方法直接将res.data字段的数据返回
+    * @description 用于发送put请求，并且会设置apiPrefix，这个方法直接将res.data.info字段的数据返回
     * @returns 
     */
     public putWithPrefix = async <T = any, D = any>(url: string,data?: D,
@@ -196,12 +195,12 @@ export class HttpService {
     /**
     * @template T 响应数据的数据类型
     * @template D 请求体data的数据类型
-    * @description 用于发送delete请求，这个方法直接将res.data字段的数据返回
+    * @description 用于发送delete请求，这个方法直接将res.data.info字段的数据返回
     * @returns 
     */
     public delete = async <T = any, D = any>(url: string, config?: AxiosRequestConfig<D>) => {
         const result = await this.instance.delete<T, AxiosResponse<{info: T}>>(url, config);
-        return result.data as BaseResponse<T>;
+        return result.data.info as T;
     }
 }
 
