@@ -70,9 +70,11 @@ onBeforeUnmount(() => {
   <main class="app-page">
     <div class="workspace">
       <nav class="nav-rail" aria-label="主导航">
-        <a class="brand-mark" href="/" aria-label="此刻首页"
-          ><span>ↄ</span><span>ↄ</span></a
-        >
+        <div class="brand-mark" href="/" aria-label="此刻首页">
+          <div>
+            {{ main.userInfo?.username?.substring(0, 1)?.toUpperCase() }}
+          </div>
+        </div>
         <div class="rail-links">
           <button
             class="rail-button"

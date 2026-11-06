@@ -127,12 +127,7 @@ a {
   display: flex;
   align-items: center;
   justify-content: center;
-  text-decoration: none;
   font-size: 37px;
-  line-height: 1;
-  letter-spacing: -12px;
-  padding-right: 12px;
-  flex-shrink: 0;
 }
 .brand-mark span:first-child {
   transform: rotate(-90deg) translate(-2px, 0);
@@ -1431,6 +1426,9 @@ a {
     gap: 30px;
   }
   .brand-mark {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 34px;
     height: 34px;
     font-size: 32px;
