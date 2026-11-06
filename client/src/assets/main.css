@@ -756,7 +756,8 @@ a {
   z-index: 5;
   border: 0;
   border-radius: 20px;
-  background: #f4efe2;
+  background: #11b196;
+  top: 72px;
   padding: 12px 18px;
   display: flex;
   align-items: center;

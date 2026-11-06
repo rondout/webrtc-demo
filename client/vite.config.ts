@@ -30,12 +30,12 @@ export default defineConfig({
     "host": '0.0.0.0',
     proxy: {
       '/api': {
-        target: 'https://localhost:4004',
+        target: 'https://8.137.92.87',
         // 仅本地开发代理接受项目生成的自签名证书。
         secure: false,
       },
       '/ws': {
-        target: 'https://localhost:4004',
+        target: 'https://8.137.92.87',
         ws: true,
         secure: false,
       },
