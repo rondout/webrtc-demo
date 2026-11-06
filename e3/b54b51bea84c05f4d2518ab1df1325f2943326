@@ -1,0 +1,16 @@
+client/.env
+  h_82e58b1971efb5 1-5
+compose.yaml
+  h_82e58b1971efb5 4
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "e3b54b51bea84c05f4d2518ab1df1325f2943326",
+  "prompts": {},
+  "humans": {
+    "h_82e58b1971efb5": {
+      "author": "shufei.han <shufei.han@gl-inet.com>"
+    }
+  }
+}
