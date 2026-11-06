@@ -11,7 +11,7 @@
     "type-check": "vue-tsc --build --force"
   },
   "dependencies": {
-    "@gl/main": "^0.0.9",
+    "@gl/main": "^1.0.9",
     "ant-design-vue": "^4.2.5",
     "axios": "^1.7.7",
     "pinia": "^2.2.4",

@@ -1,0 +1,17 @@
+services:
+  nginx:
+    image: nginx:stable-alpine
+    container_name: webrtc
+    restart: unless-stopped
+
+    ports:
+      - "80:80"
+      - "443:443"
+
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+    volumes:
+      - ./server/public:/usr/share/nginx/html:ro
+      - ./deploy/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./.certs:/etc/nginx/certs:ro
