@@ -1,0 +1,16 @@
+client/src/api/index.ts
+  h_82e58b1971efb5 1-208
+client/src/api/http.ts
+  h_82e58b1971efb5 12
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "8a2b1d5d5c60e42ab0ddebae8050cd50812c4d50",
+  "prompts": {},
+  "humans": {
+    "h_82e58b1971efb5": {
+      "author": "shufei.han <shufei.han@gl-inet.com>"
+    }
+  }
+}
