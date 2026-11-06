@@ -19,6 +19,7 @@ services:
 
   server:
     image: webrtc-server:local
+    container_name: chat_backend
     build:
       context: ./server
     restart: unless-stopped
