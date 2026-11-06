@@ -1,0 +1,24 @@
+docs/docker-ubuntu-learning-record.md
+  s_322c2805cb8a80::t_36dda01a05e30e 1-991
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "f134cb2fb20f6a35278f1d06c507077cde0a9c81",
+  "prompts": {},
+  "humans": {
+    "h_82e58b1971efb5": {
+      "author": "shufei.han <shufei.han@gl-inet.com>"
+    }
+  },
+  "sessions": {
+    "s_322c2805cb8a80": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a17ca0-5a6a-7082-998c-633cdb03110d",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "shufei.han <shufei.han@gl-inet.com>"
+    }
+  }
+}
