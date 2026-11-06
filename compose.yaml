@@ -8,10 +8,23 @@ services:
       - "80:80"
       - "443:443"
 
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
+    # 先启动后端容器，再启动 Nginx；启动顺序不等于接口已就绪。
+    depends_on:
+      - server
 
     volumes:
       - ./server/public:/usr/share/nginx/html:ro
       - ./deploy/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
       - ./.certs:/etc/nginx/certs:ro
+
+  server:
+    image: webrtc-server:local
+    build:
+      context: ./server
+    restart: unless-stopped
+
+    # 两个服务在 Compose 默认网络内通信，无需向宿主机发布 4004。
+    volumes:
+      # JSON 数据可读写，重建容器后仍保留在宿主机。
+      - ./server/db:/app/server/db
+      - ./.certs:/app/.certs:ro
