@@ -61,20 +61,23 @@ export const getUsers = async () => {
     }
 }
 
-export const addUser = async (user: UserInfo) => {
-    try {
+// 串行执行注册的读取、查重和写入，避免同时注册覆盖 JSON 或产生同名账号。
+let userWriteQueue: Promise<void> = Promise.resolve()
+export const addUser = (user: UserInfo) => {
+    const task = userWriteQueue.then(async () => {
+        if (typeof user?.username !== 'string' || !user.username.trim() ||
+            typeof user?.password !== 'string' || !user.password.trim())
+            throw '用户名和密码不能为空'
+        const username = user.username.trim()
         const userList = await getUsers()
-        console.log(user);
-
-        if (userList.find(u => u.username === user.username))
-            throw "user already exist"
-        if (!user.username || !user.password)
-            throw "user not valid"
-        userList.push(user)
+        if (userList.find(u => u.username === username))
+            throw '用户名已存在'
+        // 只保存注册所需字段，密码保留原值，不裁剪用户输入的有效空格。
+        userList.push({ username, password: user.password, online: false })
         await fs.writeFile(userListPath, JSON.stringify(userList))
-    } catch (error) {
-        throw error?.toString() || "user not valid"
-    }
+    })
+    userWriteQueue = task.catch(() => {})
+    return task
 }
 
 export const login = async (user: UserInfo) => {

@@ -44,9 +44,9 @@ function timeLabel(username: string) {
   <aside class="contacts-sidebar">
     <div class="sidebar-brand">
       <div class="sidebar-identity">
-        <h2>此刻<span>/ together</span></h2>
+        <h2>{{ main.userInfo?.username }}</h2>
         <p class="current-account" :title="main.userInfo?.username">
-          当前登录：<strong>{{ main.userInfo?.username }}</strong>
+          此刻<strong><span> / together</span></strong>
         </p>
       </div>
       <span class="brand-spark">✳</span>

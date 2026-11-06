@@ -48,7 +48,8 @@ app.post('/api/user', async (req, res) => {
         await addUser(data)
         res.send(new BaseResponse(true))
     } catch (error) {
-        res.status(500).send(new BaseResponse(false, error))
+        const status = error === '用户名已存在' ? 409 : error === '用户名和密码不能为空' ? 400 : 500
+        res.status(status).send(new BaseResponse(false, typeof error === 'string' ? error : '注册失败，请稍后重试'))
     }
 })
 
