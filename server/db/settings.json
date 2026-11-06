@@ -12,7 +12,7 @@
     "cameraEnabled": true
   },
   "user": {
-    "microphoneEnabled": true,
-    "cameraEnabled": true
+    "microphoneEnabled": false,
+    "cameraEnabled": false
   }
 }
