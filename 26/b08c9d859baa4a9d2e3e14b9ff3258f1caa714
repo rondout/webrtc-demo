@@ -1,0 +1,14 @@
+compose.yaml
+  h_82e58b1971efb5 22
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "26b08c9d859baa4a9d2e3e14b9ff3258f1caa714",
+  "prompts": {},
+  "humans": {
+    "h_82e58b1971efb5": {
+      "author": "shufei.han <shufei.han@gl-inet.com>"
+    }
+  }
+}
