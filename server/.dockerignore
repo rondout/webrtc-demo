@@ -1,0 +1,8 @@
+# 构建上下文为 server；不发送本机依赖、产物和用户数据。
+node_modules
+dist
+db
+public
+*.log
+.env
+.env.*
