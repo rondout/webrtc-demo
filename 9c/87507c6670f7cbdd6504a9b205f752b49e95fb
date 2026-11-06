@@ -1,0 +1,14 @@
+package.json
+  h_82e58b1971efb5 10
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "9c87507c6670f7cbdd6504a9b205f752b49e95fb",
+  "prompts": {},
+  "humans": {
+    "h_82e58b1971efb5": {
+      "author": "shufei.han <shufei.han@gl-inet.com>"
+    }
+  }
+}
