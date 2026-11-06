@@ -1,7 +1,7 @@
 services:
   nginx:
     image: nginx:stable-alpine
-    container_name: webrtc
+    container_name: chat_web
     restart: unless-stopped
 
     ports:
