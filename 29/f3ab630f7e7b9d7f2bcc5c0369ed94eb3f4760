@@ -1,0 +1,16 @@
+client/src/assets/main.css
+  h_82e58b1971efb5 1429-1431
+client/src/views/main/MainPage.vue
+  h_82e58b1971efb5 73-77
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "29f3ab630f7e7b9d7f2bcc5c0369ed94eb3f4760",
+  "prompts": {},
+  "humans": {
+    "h_82e58b1971efb5": {
+      "author": "shufei.han <shufei.han@gl-inet.com>"
+    }
+  }
+}
