@@ -8,8 +8,8 @@
  */
 import type { UserInfo } from "@/models/base.model";
 import type { MessageContent } from "@/models/ws.model";
-import { HttpService } from "@gl/main";
 import type { UserSettings } from '@/models/settings.model';
+import { HttpService } from ".";
 
 export const httService = new HttpService({}, () => { }, (res) => {
     return res
