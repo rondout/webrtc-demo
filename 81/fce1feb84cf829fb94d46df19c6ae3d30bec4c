@@ -1,0 +1,28 @@
+server/Dockerfile
+  s_322c2805cb8a80::t_670664c8787256 1-34
+server/package.json
+  s_322c2805cb8a80::t_12743608ff6b8d 7-8
+server/.dockerignore
+  s_322c2805cb8a80::t_670664c8787256 1-8
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "81fce1feb84cf829fb94d46df19c6ae3d30bec4c",
+  "prompts": {},
+  "humans": {
+    "h_82e58b1971efb5": {
+      "author": "shufei.han <shufei.han@gl-inet.com>"
+    }
+  },
+  "sessions": {
+    "s_322c2805cb8a80": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a17ca0-5a6a-7082-998c-633cdb03110d",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "shufei.han <shufei.han@gl-inet.com>"
+    }
+  }
+}
