@@ -1,0 +1,32 @@
+client/src/api/http.ts
+  s_322c2805cb8a80::t_eaf0ff5dd7950e 21-23
+client/src/views/LoginPage.vue
+  s_322c2805cb8a80::t_eaf0ff5dd7950e 2-4,7-10,12-16,18-38,61-62,77,82,86-91,99-111
+client/src/views/main/UserList.vue
+  h_82e58b1971efb5 47,49
+server/tools/index.ts
+  s_322c2805cb8a80::t_eaf0ff5dd7950e 64-71,73-76,78-80,127
+server/tools/httpServer.ts
+  s_322c2805cb8a80::t_eaf0ff5dd7950e 51-52
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "6a1c8086056acb02afc3d4c01cc536f456c7b6ec",
+  "prompts": {},
+  "humans": {
+    "h_82e58b1971efb5": {
+      "author": "shufei.han <shufei.han@gl-inet.com>"
+    }
+  },
+  "sessions": {
+    "s_322c2805cb8a80": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a17ca0-5a6a-7082-998c-633cdb03110d",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "shufei.han <shufei.han@gl-inet.com>"
+    }
+  }
+}
